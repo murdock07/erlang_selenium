@@ -1,1 +1,9 @@
-# erlang_selenium
+selenium_demo
+=====
+
+An OTP application
+
+Build
+-----
+
+    $ rebar3 compile

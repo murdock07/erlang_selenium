@@ -1,0 +1,8 @@
+[{<<"jsx">>,
+  {git,"https://github.com/talentdeficit/jsx.git",
+       {ref,"7c7a69c167aecd241a6676ab7e5a7665c782b976"}},
+  0},
+ {<<"webdrv">>,
+  {git,"https://github.com/murdock07/webdrv.git",
+       {ref,"7ceaf1f67d834e841ca0133b4bf899a9fa2db6bb"}},
+  0}].
