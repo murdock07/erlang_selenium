@@ -24,7 +24,7 @@ test_f() ->
     webdrv_session:stop_session(test_f).
 
 test_f_custom() ->
-    Capability = #{browserName => <<"firefox">>},
+    Capability = #{firstMatch => [#{browserName => <<"firefox">>}]},
     {ok, _Pid} = webdrv_session:start_session(test_f_custom, ?FIREFOXDRIVER,  Capability, 10000),
     webdrv_session:set_url(test_f_custom, "http://www.random.org/integers/"),
     {ok, Emin} = webdrv_session:find_element(test_f_custom, "name", "min"),
