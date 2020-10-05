@@ -1,4 +1,4 @@
-selenium_demo
+erlang_webdriver
 =====
 
 An OTP application

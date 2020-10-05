@@ -1,9 +1,9 @@
 %%%-------------------------------------------------------------------
-%% @doc selenium_demo top level supervisor.
+%% @doc erlang_webdriver top level supervisor.
 %% @end
 %%%-------------------------------------------------------------------
 
--module(selenium_demo_sup).
+-module(erlang_webdriver_sup).
 
 -behaviour(supervisor).
 

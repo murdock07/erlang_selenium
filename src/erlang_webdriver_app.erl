@@ -1,16 +1,16 @@
 %%%-------------------------------------------------------------------
-%% @doc selenium_demo public API
+%% @doc erlang_webdriver public API
 %% @end
 %%%-------------------------------------------------------------------
 
--module(selenium_demo_app).
+-module(erlang_webdriver_app).
 
 -behaviour(application).
 
 -export([start/2, stop/1]).
 
 start(_StartType, _StartArgs) ->
-    selenium_demo_sup:start_link().
+    erlang_webdriver_sup:start_link().
 
 stop(_State) ->
     ok.

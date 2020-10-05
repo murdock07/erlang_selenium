@@ -1,8 +1,8 @@
-{application, selenium_demo,
+{application, erlang_webdriver,
  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, {selenium_demo_app, []}},
+  {mod, {erlang_webdriver_app, []}},
   {applications,
    [kernel,
     stdlib
