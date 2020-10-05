@@ -26,7 +26,7 @@
     minimize_window/0,
     fullscreen_window/0,
     get_active_element/0,
-    find_element/0,
+    find_element/3,
     find_elements/0,
     find_element_from_element/0,
     find_elements_from_element/0,
@@ -34,16 +34,16 @@
     get_element_attribute/0,
     get_element_property/0,
     get_element_css_value/0,
-    get_element_text/0,
+    get_element_text/2,
     get_element_tag_name/0,
     get_element_rect/0,
     is_element_enabled/0,
     get_computed_role/0,
     get_computed_label/0,
-    element_click/0,
-    element_clear/0,
-    element_send_keys/0,
-    get_page_source/0,
+    element_click/2,
+    element_clear/2,
+    element_send_keys/3,
+    get_page_source/1,
     execute_script/0,
     execute_script_async/0,
     get_all_cookies/0,
@@ -92,8 +92,7 @@ set_timeouts() ->
 navigate_to(SessionName, TargetUrl) ->
     {Driver, SessionId} = wrapper:get_session(SessionName),
     Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++ "/url",
-    Result = wrapper:post_request(Url, #{<<"url">> => TargetUrl}),
-    io:format(user, "Navigate to result: ~n~p~n", [Result]).
+    wrapper:post_request(Url, #{<<"url">> => TargetUrl}).
 
 get_current_url() -> 
     % GET 	/session/{session id}/url
@@ -149,9 +148,13 @@ fullscreen_window() ->
 get_active_element() -> 
     % GET 	/session/{session id}/element/active
     ok.
-find_element() -> 
-    % POST 	/session/{session id}/element
-    ok.
+find_element(SessionName, LocationStrategy, Selector) -> 
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++ "/element",
+    ElemMap = wrapper:post_request(Url, #{<<"using">> => LocationStrategy, <<"value">> => Selector}),
+    [{_Key, Value}] = maps:to_list(ElemMap),
+    Value.
+
 find_elements() -> 
     % POST 	/session/{session id}/elements
     ok.
@@ -173,9 +176,14 @@ get_element_property() ->
 get_element_css_value() -> 
     % GET 	/session/{session id}/element/{element id}/css/{property name}
     ok.
-get_element_text() -> 
+
+get_element_text(SessionName, ElementId) -> 
     % GET 	/session/{session id}/element/{element id}/text
-    ok.
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++
+                    "/element/" ++ binary_to_list(ElementId) ++ "/text",
+    wrapper:get_request(Url).
+
 get_element_tag_name() -> 
     % GET 	/session/{session id}/element/{element id}/name
     ok.
@@ -191,18 +199,31 @@ get_computed_role() ->
 get_computed_label() -> 
     % GET 	/session/{session id}/element/{element id}/computedlabel
     ok.
-element_click() -> 
+
+element_click(SessionName, ElementId) -> 
     % POST 	/session/{session id}/element/{element id}/click
-    ok.
-element_clear() -> 
-    % POST 	/session/{session id}/element/{element id}/clear
-    ok.
-element_send_keys() -> 
-    % POST 	/session/{session id}/element/{element id}/value
-    ok.
-get_page_source() -> 
-    % GET 	/session/{session id}/source
-    ok.
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++
+                    "/element/" ++ binary_to_list(ElementId) ++ "/click",
+    wrapper:post_request(Url, #{}).
+
+element_clear(SessionName, ElementId) ->
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++
+                    "/element/" ++ binary_to_list(ElementId) ++ "/clear",
+    wrapper:post_request(Url, #{}).
+
+element_send_keys(SessionName, ElementId, Value) ->
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++
+                    "/element/" ++ binary_to_list(ElementId) ++ "/value",
+    wrapper:post_request(Url, #{<<"text">> => Value}).
+
+get_page_source(SessionName) ->
+    {Driver, SessionId} = wrapper:get_session(SessionName),
+    Url = Driver ++ "/session/" ++ binary_to_list(SessionId) ++ "/source",
+    wrapper:get_request(Url).
+
 execute_script() -> 
     % POST 	/session/{session id}/execute/sync
     ok.

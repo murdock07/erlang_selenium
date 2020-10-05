@@ -1,7 +1,7 @@
 -module(wrapper).
 
 -export([
-    get_reqeuest/0,
+    get_request/1,
     post_request/2,
     delete_request/1,
     store_session/1,
@@ -11,8 +11,14 @@
 
 -include("webdriver.hrl").
 
-get_reqeuest() -> 
-    ok.
+get_request(Url) ->
+    {ok, {_, _, Host, Port, _, _}} = http_uri:parse(Url),
+    Headers = [
+        {"Content-Type", json:mime_type()},
+        {"host", Host ++ ":" ++ integer_to_list(Port)},
+        {"connection", "keep-alive"}],
+    Request = {Url, Headers},
+    request(get, Request, #{timeout => 10000}).
 
 post_request(Url, Body) -> 
     {ok, {_, _, Host, Port, _, _}} = http_uri:parse(Url),
@@ -36,7 +42,7 @@ delete_request(Url) ->
     request(delete, Request, #{timeout => 10000}).
 
 request(Method, Request, Options) -> 
-    io:format(user, "Method: ~p~nRequest. ~p~nOptions: ~p~n", [Method, Request, Options]),
+    %io:format(user, "Method: ~p~nRequest. ~p~nOptions: ~p~n", [Method, Request, Options]),
     Result = httpc:request(Method, Request, [{timeout, timeout(Options)}, {autoredirect, true}], []),
     case Result of
         {ok, Response} -> 
