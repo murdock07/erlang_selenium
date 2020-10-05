@@ -17,7 +17,10 @@ random() ->
     Button = webdriver:find_element(ts, <<"xpath">>, <<"/html/body/div/form/p[5]/input[1]">>),
     webdriver:element_click(ts, Button),
 
-    Source = webdriver:get_page_source(ts),
-    io:format(user, "Source: ~n~p~n", [Source]),
+    %Source = webdriver:get_page_source(ts),
+    %io:format(user, "Source: ~n~p~n", [Source]),
+
+    Data = webdriver:find_element(ts, <<"xpath">>, <<"/html/body/div/pre">>),
+    io:format(user, "Result: ~n~p~n", [webdriver:get_element_text(ts, Data)]),
 
     webdriver:delete_session(ts).
